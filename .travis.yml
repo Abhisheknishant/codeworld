@@ -468,7 +468,7 @@ jobs:
     - stage: upgrade_stack
       name: "Upgrade Stack"
       name: "root"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="."
         - JOB=1
@@ -486,77 +486,77 @@ jobs:
         - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
     - stage: upgrade_stack
       name: "Account"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-account"
         - JOB=2
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-api"
         - JOB=3
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Auth"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-auth"
         - JOB=4
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Base (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-base"
         - JOB=5
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Compiler"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-compiler"
         - JOB=6
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Error Sanitizer"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-error-sanitizer"
         - JOB=7
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Game API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-api"
         - JOB=8
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Game Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-server"
         - JOB=9
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Prediction"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-prediction"
         - JOB=10
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-server"
         - JOB=11
       script: *upgrade_stack
     - stage: upgrade_stack
       name: "Funblocks Client (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="funblocks-client"
         - JOB=12
@@ -564,7 +564,7 @@ jobs:
     - stage: build_some_dependencies
       name: "Build some dependencies"
       name: "root"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="."
         - JOB=1
@@ -600,77 +600,77 @@ jobs:
         - sudo swapoff -a
     - stage: build_some_dependencies
       name: "Account"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-account"
         - JOB=2
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-api"
         - JOB=3
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Auth"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-auth"
         - JOB=4
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Base (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-base"
         - JOB=5
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Compiler"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-compiler"
         - JOB=6
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Error Sanitizer"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-error-sanitizer"
         - JOB=7
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Game API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-api"
         - JOB=8
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Game Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-server"
         - JOB=9
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Prediction"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-prediction"
         - JOB=10
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-server"
         - JOB=11
       script: *build_some_dependencies
     - stage: build_some_dependencies
       name: "Funblocks Client (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="funblocks-client"
         - JOB=12
@@ -678,7 +678,7 @@ jobs:
     - stage: build_dependencies
       name: "Build dependencies"
       name: "root"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="."
         - JOB=1
@@ -693,84 +693,84 @@ jobs:
         - travis_wait 30 stack build --fast --dependencies-only
     - stage: build_dependencies
       name: "Account"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-account"
         - JOB=2
       script: *build_dependencies
     - stage: build_dependencies
       name: "API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-api"
         - JOB=3
       script: *build_dependencies
     - stage: build_dependencies
       name: "Auth"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-auth"
         - JOB=4
       script: *build_dependencies
     - stage: build_dependencies
       name: "Base (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-base"
         - JOB=5
       script: *build_dependencies
     - stage: build_dependencies
       name: "Compiler"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-compiler"
         - JOB=6
       script: *build_dependencies
     - stage: build_dependencies
       name: "Error Sanitizer"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-error-sanitizer"
         - JOB=7
       script: *build_dependencies
     - stage: build_dependencies
       name: "Game API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-api"
         - JOB=8
       script: *build_dependencies
     - stage: build_dependencies
       name: "Game Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-server"
         - JOB=9
       script: *build_dependencies
     - stage: build_dependencies
       name: "Prediction"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-prediction"
         - JOB=10
       script: *build_dependencies
     - stage: build_dependencies
       name: "Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-server"
         - JOB=11
       script: *build_dependencies
     - stage: build_dependencies
       name: "Funblocks Client (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="funblocks-client"
         - JOB=12
       script: *build_dependencies
     - stage: build
       name: "root"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="."
         - JOB=1
@@ -785,42 +785,42 @@ jobs:
         - travis_wait 30 stack build --fast $PACKAGE # --ghc-options="-dynamic"
     - stage: build
       name: "Account"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-account"
         - JOB=2
       script: *build
     - stage: build
       name: "API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-api"
         - JOB=3
       script: *build
     - stage: build
       name: "Auth"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-auth"
         - JOB=4
       script: *build
     - stage: build
       name: "Base (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-base"
         - JOB=5
       script: *build
     - stage: build
       name: "Compiler"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-compiler"
         - JOB=6
       script: *build
     - stage: build
       name: "Error Sanitizer"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-error-sanitizer"
         - JOB=7
@@ -828,34 +828,34 @@ jobs:
     - stage: build
       name: "Game API"
       arch: arm64
-	    env:
+	  env:
         - PACKAGE="codeworld-game-api"
         - JOB=8
       script: *build
     - stage: build
       name: "Game Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-server"
         - JOB=9
       script: *build
     - stage: build
       name: "Prediction"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-prediction"
         - JOB=10
       script: *build
     - stage: build
       name: "Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-server"
         - JOB=11
       script: *build
     - stage: build
       name: "Funblocks Client (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="funblocks-client"
         - JOB=12
@@ -868,7 +868,7 @@ jobs:
     #   script: *test
     - stage: test
       name: "Account"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-account"
         - JOB=2
@@ -883,21 +883,21 @@ jobs:
         - stack test --fast $PACKAGE
     - stage: test
       name: "API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-api"
         - JOB=3
       script: *test
     - stage: test
       name: "Auth"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-auth"
         - JOB=4
       script: *test
     - stage: test
       name: "Base (with ghcjs-base-stub)"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-base"
         - JOB=5
@@ -910,14 +910,14 @@ jobs:
     #   script: *test
     - stage: test
       name: "Error Sanitizer"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-error-sanitizer"
         - JOB=7
       script: *test
     - stage: test
       name: "Game API"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-game-api"
         - JOB=8
@@ -925,20 +925,20 @@ jobs:
     - stage: test
       name: "Game Server"
       arch: arm64
-	    env:
+	  env:
         - PACKAGE="codeworld-game-server"
         - JOB=9
       script: *test
     - stage: test
       name: "Prediction"
       arch: arm64
-	    env:
+	  env:
         - PACKAGE="codeworld-prediction"
         - JOB=10
       script: *test
     - stage: test
       name: "Server"
-	    arch: arm64
+	  arch: arm64
       env:
         - PACKAGE="codeworld-server"
         - JOB=11
