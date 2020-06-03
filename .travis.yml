@@ -465,330 +465,481 @@ jobs:
         - PACKAGE="codeworld-server"
         - JOB=11
       script: *test
-    # - stage: test
-    #   name: "Funblocks Client (with ghcjs-base-stub)"
-    #   env:
-    #     - PACKAGE="funblocks-client"
-    #     - JOB=12
+    - stage: upgrade_stack
+      name: "Upgrade Stack"
+      name: "root"
+	    arch: arm64
+      env:
+        - PACKAGE="."
+        - JOB=1
+      script: &upgrade_stack
+        - sleep $(((JOB - 1) * 20))
+        - travis_retry eval $"sudo apt-get update ; sleep 10"
+        - travis_retry eval $"sudo apt-get install --yes libgmp-dev haskell-stack ; sleep 10"
+        - export DIR=~/.local/bin
+        - if [ ! -d "$DIR" ]; then mkdir -p ~/.local/bin; fi
+        - export PATH=$HOME/.local/bin:$PATH
+        - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
+        - hash -r
+        - travis_retry eval $"stack setup --reinstall ; sleep 10"
+        - stack --version
+        - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
+    - stage: upgrade_stack
+      name: "Account"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-account"
+        - JOB=2
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-api"
+        - JOB=3
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Auth"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-auth"
+        - JOB=4
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Base (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-base"
+        - JOB=5
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Compiler"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-compiler"
+        - JOB=6
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Error Sanitizer"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-error-sanitizer"
+        - JOB=7
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Game API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-api"
+        - JOB=8
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Game Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-server"
+        - JOB=9
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Prediction"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-prediction"
+        - JOB=10
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-server"
+        - JOB=11
+      script: *upgrade_stack
+    - stage: upgrade_stack
+      name: "Funblocks Client (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="funblocks-client"
+        - JOB=12
+      script: *upgrade_stack
+    - stage: build_some_dependencies
+      name: "Build some dependencies"
+      name: "root"
+	    arch: arm64
+      env:
+        - PACKAGE="."
+        - JOB=1
+      script: &build_some_dependencies
+        - sleep $(((JOB - 1) * 20))
+        - travis_retry eval $"sudo apt-get update ; sleep 10"
+        - travis_retry eval $"sudo apt-get install --yes libgmp-dev haskell-stack ; sleep 10"
+        - export PATH=$HOME/.local/bin:$PATH
+        - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
+        - hash -r
+        - travis_retry eval $"stack setup --reinstall ; sleep 10"
+        - |
+          travis_wait 30 stack build --fast \
+            base-compat \
+            base-compat-batteries \
+            basement \
+            cereal \
+            colour \
+            cryptonite \
+            hashable \
+            haskell-src-exts \
+            lens \
+            transformers \
+            network \
+            old-time \
+            sqlite-simple
+        - sudo fallocate -l 4G /swapfile
+        - sudo chmod 600 /swapfile
+        - sudo mkswap /swapfile
+        - sudo swapon /swapfile
+        - sudo sysctl vm.swappiness=90
+        - travis_wait 30 stack build -j1 --fast jsaddle-dom
+        - sudo swapoff -a
+    - stage: build_some_dependencies
+      name: "Account"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-account"
+        - JOB=2
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-api"
+        - JOB=3
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Auth"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-auth"
+        - JOB=4
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Base (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-base"
+        - JOB=5
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Compiler"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-compiler"
+        - JOB=6
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Error Sanitizer"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-error-sanitizer"
+        - JOB=7
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Game API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-api"
+        - JOB=8
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Game Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-server"
+        - JOB=9
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Prediction"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-prediction"
+        - JOB=10
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-server"
+        - JOB=11
+      script: *build_some_dependencies
+    - stage: build_some_dependencies
+      name: "Funblocks Client (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="funblocks-client"
+        - JOB=12
+      script: *build_some_dependencies
+    - stage: build_dependencies
+      name: "Build dependencies"
+      name: "root"
+	    arch: arm64
+      env:
+        - PACKAGE="."
+        - JOB=1
+      script: &build_dependencies
+        - sleep $(((JOB - 1) * 20))
+        - travis_retry eval $"sudo apt-get update ; sleep 10"
+        - travis_retry eval $"sudo apt-get install --yes libgmp-dev haskell-stack ; sleep 10"
+        - export PATH=$HOME/.local/bin:$PATH
+        - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
+        - hash -r
+        - travis_retry eval $"stack setup --reinstall ; sleep 10" # - stack clean --full
+        - travis_wait 30 stack build --fast --dependencies-only
+    - stage: build_dependencies
+      name: "Account"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-account"
+        - JOB=2
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-api"
+        - JOB=3
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Auth"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-auth"
+        - JOB=4
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Base (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-base"
+        - JOB=5
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Compiler"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-compiler"
+        - JOB=6
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Error Sanitizer"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-error-sanitizer"
+        - JOB=7
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Game API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-api"
+        - JOB=8
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Game Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-server"
+        - JOB=9
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Prediction"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-prediction"
+        - JOB=10
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-server"
+        - JOB=11
+      script: *build_dependencies
+    - stage: build_dependencies
+      name: "Funblocks Client (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="funblocks-client"
+        - JOB=12
+      script: *build_dependencies
+    - stage: build
+      name: "root"
+	    arch: arm64
+      env:
+        - PACKAGE="."
+        - JOB=1
+      script: &build
+        - sleep $(((JOB - 1) * 20))
+        - travis_retry eval $"sudo apt-get update ; sleep 10"
+        - travis_retry eval $"sudo apt-get install --yes libgmp-dev haskell-stack ; sleep 10"
+        - export PATH=$HOME/.local/bin:$PATH
+        - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
+        - hash -r
+        - travis_retry eval $"stack setup --reinstall ; sleep 10"
+        - travis_wait 30 stack build --fast $PACKAGE # --ghc-options="-dynamic"
+    - stage: build
+      name: "Account"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-account"
+        - JOB=2
+      script: *build
+    - stage: build
+      name: "API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-api"
+        - JOB=3
+      script: *build
+    - stage: build
+      name: "Auth"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-auth"
+        - JOB=4
+      script: *build
+    - stage: build
+      name: "Base (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-base"
+        - JOB=5
+      script: *build
+    - stage: build
+      name: "Compiler"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-compiler"
+        - JOB=6
+      script: *build
+    - stage: build
+      name: "Error Sanitizer"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-error-sanitizer"
+        - JOB=7
+      script: *build
+    - stage: build
+      name: "Game API"
+      arch: arm64
+	    env:
+        - PACKAGE="codeworld-game-api"
+        - JOB=8
+      script: *build
+    - stage: build
+      name: "Game Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-server"
+        - JOB=9
+      script: *build
+    - stage: build
+      name: "Prediction"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-prediction"
+        - JOB=10
+      script: *build
+    - stage: build
+      name: "Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-server"
+        - JOB=11
+      script: *build
+    - stage: build
+      name: "Funblocks Client (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="funblocks-client"
+        - JOB=12
+      script: *build
+    # - stage: Test
+    #   name: "root"
+    #  env:
+        # - PACKAGE="*"
+        # - JOB=1
     #   script: *test
-    # - stage: build_ghcjs_dependencies
-    #   name: "API"
+    - stage: test
+      name: "Account"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-account"
+        - JOB=2
+      script: &test
+        - sleep $(((JOB - 1) * 20))
+        - travis_retry eval $"sudo apt-get update ; sleep 10"
+        - travis_retry eval $"sudo apt-get install --yes libgmp-dev haskell-stack ; sleep 10"
+        - export PATH=$HOME/.local/bin:$PATH
+        - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
+        - hash -r
+        - travis_retry eval $"stack setup --reinstall ; sleep 10"
+        - stack test --fast $PACKAGE
+    - stage: test
+      name: "API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-api"
+        - JOB=3
+      script: *test
+    - stage: test
+      name: "Auth"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-auth"
+        - JOB=4
+      script: *test
+    - stage: test
+      name: "Base (with ghcjs-base-stub)"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-base"
+        - JOB=5
+      script: *test
+    # - stage: test
+    #   name: "Compiler"
     #   env:
-    #     - PACKAGE="codeworld-api"
-    #     - JOB=3
-    #   script: &build_ghcjs_dependencies
-    #     - sleep $(((JOB - 1) * 10))
-    #     - travis_retry sudo add-apt-repository --yes ppa:hvr/ghc
-    #     - travis_retry eval $"sudo apt-get update ; sleep 10"
-    #     - travis_retry eval $"sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5 libgmp-dev haskell-stack ; sleep 10"
-    #     - export PATH=$HOME/.local/bin:$PATH
-    #     - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
-    #     - hash -r
-    #     - travis_retry eval $"stack setup --reinstall ; sleep 10"
-    #     - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
-    #     - nvm install 10
-    #     - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
-    #     - export
-    #     - cd ghcjs
-    #     - travis_retry git submodule update --init --recursive
-    #     - ./utils/makePackages.sh
-    #     - travis_retry eval $"cabal new-update ; sleep 10"
-    #     - cabal new-configure
-    #     - cabal new-build -j --only-dependencies --disable-optimization
-    # - stage: build_ghcjs_dependencies
-    #   name: "Base"
-    #   env:
-    #     - PACKAGE="codeworld-base"
-    #     - JOB=5
-    #   script: *build_ghcjs_dependencies
-    # - stage: build_ghcjs_dependencies
-    #   name: "Prediction"
-    #   env:
-    #     - PACKAGE="codeworld-prediction"
-    #     - JOB=10
-    #   script: *build_ghcjs_dependencies
-    # - stage: build_ghcjs_dependencies
-    #   name: "Funblocks Client"
-    #   env:
-    #     - PACKAGE="funblocks-client"
-    #     - JOB=12
-    #   script: *build_ghcjs_dependencies
-    # - stage: build_ghcjs
-    #   name: "API"
-    #   env:
-    #     - PACKAGE="codeworld-api"
-    #     - JOB=3
-    #   script: &build_ghcjs
-    #     - sleep $(((JOB - 1) * 10))
-    #     - travis_retry sudo add-apt-repository --yes ppa:hvr/ghc
-    #     - travis_retry eval $"sudo apt-get update ; sleep 10"
-    #     - travis_retry eval $"sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5 libgmp-dev haskell-stack ; sleep 10"
-    #     - export PATH=$HOME/.local/bin:$PATH
-    #     - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
-    #     - hash -r
-    #     - travis_retry eval $"stack setup --reinstall ; sleep 10"
-    #     - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
-    #     - nvm install 10
-    #     - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
-    #     - export
-    #     - cd ghcjs
-    #     - travis_retry git submodule update --init --recursive
-    #     - ./utils/makePackages.sh
-    #     - cabal new-build -j
-    # - stage: build_ghcjs
-    #   name: "Base"
-    #   env:
-    #     - PACKAGE="codeworld-base"
-    #     - JOB=5
-    #   script: *build_ghcjs
-    # - stage: build_ghcjs
-    #   name: "Prediction"
-    #   env:
-    #     - PACKAGE="codeworld-prediction"
-    #     - JOB=10
-    #   script: *build_ghcjs
-    # - stage: build_ghcjs
-    #   name: "Funblocks Client"
-    #   env:
-    #     - PACKAGE="funblocks-client"
-    #     - JOB=12
-    #   script: *build_ghcjs
-    # - stage: install_ghcjs
-    #   name: "API"
-    #   env:
-    #     - PACKAGE="codeworld-api"
-    #     - JOB=3
-    #   script: &install_ghcjs
-    #     - sleep $(((JOB - 1) * 10))
-    #     - travis_retry sudo add-apt-repository --yes ppa:hvr/ghc
-    #     - travis_retry eval $"sudo apt-get update ; sleep 10"
-    #     - travis_retry eval $"sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5 libgmp-dev haskell-stack ; sleep 10"
-    #     - export PATH=$HOME/.local/bin:$PATH
-    #     - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
-    #     - hash -r
-    #     - travis_retry eval $"stack setup --reinstall ; sleep 10"
-    #     - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
-    #     - nvm install 10
-    #     - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
-    #     - export
-    #     - cd ghcjs
-    #     - travis_retry git submodule update --init --recursive
-    #     - ./utils/makePackages.sh
-    #     - cabal new-install --only-dependencies --lib
-    #     - cabal new-install -v --lib
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
-    # - stage: install_ghcjs
-    #   name: "Base"
-    #   env:
-    #     - PACKAGE="codeworld-base"
-    #     - JOB=5
-    #   script: *install_ghcjs
-    # - stage: install_ghcjs
-    #   name: "Prediction"
-    #   env:
-    #     - PACKAGE="codeworld-prediction"
-    #     - JOB=10
-    #   script: *install_ghcjs
-    # - stage: install_ghcjs
-    #   name: "Funblocks Client"
-    #   env:
-    #     - PACKAGE="funblocks-client"
-    #     - JOB=12
-    #   script: *install_ghcjs
-    # - stage: boot_ghcjs
-    #   name: "API"
-    #   env:
-    #     - PACKAGE="codeworld-api"
-    #     - JOB=3
-    #   script: &boot_ghcjs
-    #     - sleep $(((JOB - 1) * 1))
-    #     - travis_retry sudo add-apt-repository --yes ppa:hvr/ghc
-    #     - travis_retry eval $"sudo apt-get update ; sleep 1"
-    #     - travis_retry eval $"sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5 libgmp-dev haskell-stack ; sleep 1"
-    #     - export PATH=$HOME/.local/bin:$PATH
-    #     - travis_retry eval $"stack upgrade --binary-only ; sleep 1"
-    #     - hash -r
-    #     - travis_retry eval $"stack setup --reinstall ; sleep 1"
-    #     - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 1"
-    #     - nvm install 10
-    #     - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
-    #     - export
-    #     - travis_retry git submodule update --init --recursive
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
-    #     - cd ghcjs
-    #     - travis_retry git submodule update --init --recursive
-    #     - ./utils/makePackages.sh
-    #     - ghcjs --version
-    #     - ghcjs-boot --verbosity 0 -j 2 -s $TRAVIS_BUILD_DIR/ghcjs/lib/boot --no-haddock --no-prof
-    #     - cabal --ghcjs --version
-    # - stage: boot_ghcjs
-    #   name: "Base"
-    #   env:
-    #     - PACKAGE="codeworld-base"
-    #     - JOB=5
-    #   script: *boot_ghcjs
-    # - stage: boot_ghcjs
-    #   name: "Prediction"
-    #   env:
-    #     - PACKAGE="codeworld-prediction"
-    #     - JOB=10
-    #   script: *boot_ghcjs
-    # - stage: boot_ghcjs
-    #   name: "Funblocks Client"
-    #   env:
-    #     - PACKAGE="funblocks-client"
-    #     - JOB=12
-    #   script: *boot_ghcjs
-    # - stage: build_with_ghcjs_dependencies
-    #   name: "API (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-api"
-    #     - JOB=3
-    #   script: &build_with_ghcjs_dependencies
-    #     - sleep $(((JOB - 1) * 10))
-    #     - travis_retry sudo add-apt-repository --yes ppa:hvr/ghc
-    #     - travis_retry eval $"sudo apt-get update ; sleep 10"
-    #     - travis_retry eval $"sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5 libgmp-dev haskell-stack ; sleep 10"
-    #     - export PATH=$HOME/.local/bin:$PATH
-    #     - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
-    #     - hash -r
-    #     - travis_retry eval $"stack setup --reinstall ; sleep 10"
-    #     - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
-    #     - nvm install 10
-    #     - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
-    #     - export
-    #     - travis_retry git submodule update --init --recursive
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
-    #     - cd ghcjs
-    #     - travis_retry git submodule update --init --recursive
-    #     - ./utils/makePackages.sh
-    #     - cd $TRAVIS_BUILD_DIR
-    #     - travis_retry eval $"cabal new-update ; sleep 10"
-    #     - cabal --ghcjs new-configure $PACKAGE
-    #     - cabal --ghcjs new-build -j --only-dependencies $PACKAGE
-    # - stage: build_with_ghcjs_dependencies
-    #   name: "Base (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-base"
-    #     - JOB=5
-    #   script: *build_with_ghcjs_dependencies
-    # - stage: build_with_ghcjs_dependencies
-    #   name: "Prediction (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-prediction"
-    #     - JOB=10
-    #   script: *build_with_ghcjs_dependencies
-    # - stage: build_with_ghcjs_dependencies
-    #   name: "Funblocks Client (with ghcjs)"
-    #   env:
-    #     - PACKAGE="funblocks-client"
-    #     - JOB=12
-    #   script: *build_with_ghcjs_dependencies
-    # - stage: build_with_ghcjs
-    #   name: "API (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-api"
-    #     - JOB=3
-    #   script: &build_with_ghcjs
-    #     - sleep $(((JOB - 1) * 10))
-    #     - travis_retry sudo add-apt-repository --yes ppa:hvr/ghc
-    #     - travis_retry eval $"sudo apt-get update ; sleep 10"
-    #     - travis_retry eval $"sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5 libgmp-dev haskell-stack ; sleep 10"
-    #     - export PATH=$HOME/.local/bin:$PATH
-    #     - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
-    #     - hash -r
-    #     - travis_retry eval $"stack setup --reinstall ; sleep 10"
-    #     - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
-    #     - nvm install 10
-    #     - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
-    #     - export
-    #     - travis_retry git submodule update --init --recursive
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
-    #     - cd ghcjs
-    #     - travis_retry git submodule update --init --recursive
-    #     - ./utils/makePackages.sh
-    #     - cd $TRAVIS_BUILD_DIR
-    #     - travis_retry eval $"cabal new-update ; sleep 10"
-    #     - cabal --ghcjs new-configure $PACKAGE
-    #     - cabal --ghcjs new-build -j $PACKAGE
-    # - stage: build_with_ghcjs
-    #   name: "Base (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-base"
-    #     - JOB=5
-    #   script: *build_with_ghcjs
-    # - stage: build_with_ghcjs
-    #   name: "Prediction (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-prediction"
-    #     - JOB=10
-    #   script: *build_with_ghcjs
-    # - stage: build_with_ghcjs
-    #   name: "Funblocks Client (with ghcjs)"
-    #   env:
-    #     - PACKAGE="funblocks-client"
-    #     - JOB=12
-    #   script: *build_with_ghcjs
-    # - stage: test_with_ghcjs
-    #   name: "API (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-api"
-    #     - JOB=3
-    #   script: &test_with_ghcjs
-    #     - sleep $(((JOB - 1) * 10))
-    #     - travis_retry sudo add-apt-repository --yes ppa:hvr/ghc
-    #     - travis_retry eval $"sudo apt-get update ; sleep 10"
-    #     - travis_retry eval $"sudo apt-get install --yes build-essential cabal-install-2.4 ghc-8.6.5 libgmp-dev haskell-stack ; sleep 10"
-    #     - export PATH=$HOME/.local/bin:$PATH
-    #     - travis_retry eval $"stack upgrade --binary-only ; sleep 10"
-    #     - hash -r
-    #     - travis_retry eval $"stack setup --reinstall ; sleep 10"
-    #     - travis_retry eval $"stack install --resolver lts-14.11 happy-1.19.9 alex-3.2.4 ; sleep 10"
-    #     - nvm install 10
-    #     - export PATH=$PWD/.cabal-sandbox/bin:$HOME/.cabal/bin:/opt/ghc/8.6.5/bin:/opt/cabal/2.4/bin:$PATH
-    #     - export
-    #     - travis_retry git submodule update --init --recursive
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-pkg
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/haddock-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/hsc2hs-ghcjs
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-boot
-    #     - sudo ln -fs $TRAVIS_BUILD_DIR/ghcjs/utils/dist-newstyle-wrapper.sh /usr/bin/ghcjs-run
-    #     - cd ghcjs
-    #     - travis_retry git submodule update --init --recursive
-    #     - ./utils/makePackages.sh
-    #     - cd $TRAVIS_BUILD_DIR
-    #     - travis_retry eval $"cabal new-update ; sleep 10"
-    #     - cabal --ghcjs new-configure $PACKAGE
-    #     - cabal --ghcjs new-test $PACKAGE
-    # - stage: test_with_ghcjs
-    #   name: "Prediction (with ghcjs)"
-    #   env:
-    #     - PACKAGE="codeworld-prediction"
-    #     - JOB=10
-    #   script: *test_with_ghcjs
-    # # - stage: test_with_ghcjs
-    # #   name: "Funblocks Client (with ghcjs)"
-    # #   env:
-    # #     - PACKAGE="funblocks-client"
-    # #     - JOB=12
-    # #   script: *test_with_ghcjs
+        # - PACKAGE="codeworld-compiler"
+        # - JOB=1
+    #   script: *test
+    - stage: test
+      name: "Error Sanitizer"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-error-sanitizer"
+        - JOB=7
+      script: *test
+    - stage: test
+      name: "Game API"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-game-api"
+        - JOB=8
+      script: *test
+    - stage: test
+      name: "Game Server"
+      arch: arm64
+	    env:
+        - PACKAGE="codeworld-game-server"
+        - JOB=9
+      script: *test
+    - stage: test
+      name: "Prediction"
+      arch: arm64
+	    env:
+        - PACKAGE="codeworld-prediction"
+        - JOB=10
+      script: *test
+    - stage: test
+      name: "Server"
+	    arch: arm64
+      env:
+        - PACKAGE="codeworld-server"
+        - JOB=11
+      script: *test
